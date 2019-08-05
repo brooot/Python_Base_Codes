@@ -1,0 +1,154 @@
+day24　mysql
+#1.外键扩展
+   1.级联动作
+     1.cascade
+       数据级联更新
+    on delete cascade on update cascade
+    当主表删除记录或更改被参照的字段的值时　从表会级联更新
+　　　2.restrict(默认) 
+     on delete restrict on update restrict
+     1.当主表删除记录时，如果从表中有相关记录时则不允许主表删除
+     2.当主表修改主键字段值时，如果从表有相关记录则不允许更改
+     alter table orders add foreign key(o_id) references
+     customers(c_id);
+    3.set null
+      on delete set null on update set null
+      1.当主表删除记录时，从表外键字段值变为null
+      2.当主表更改主键字段值时，从表外键字段值变为null
+alter table orders add foreign key(o_id) references customers(c_id)
+on delete set null
+on update set null;
+     4.no action 
+     同restrict,都是立即检查外键限制
+
+2.数据备份和回复(在linux终端中操作)
+  1.数据备份
+    1.语法
+    mysqldump -u用户名 -p 源库名 > 路径/xxx.sql
+    2.示例
+      1.备份db4库
+    mysqldump -uroot -p db4 > /home/tarena/mydata/db4.sql 
+    mkdir 
+    3.源库名的表示方式
+    --all-databases 备份所有的库
+    库名             指定单个的库
+    -B 库1 库2 ...   备份多个库
+    库名 表名         备份指定库　指定表
+　　2.数据恢复
+    1.语法
+    mysql -u用户名 -p 目标库名 < 路径 /xxxx.sql
+    2.回复所有的库
+    mysql -u用户名 -p < 路径
+    3.从文件中恢复指定的库
+    mysql -uroot -p db4 --one-database < /home/tarena/mydata/mysql.sql
+  3.索引(index)
+    1.定义
+      对数据库中表的一列或者多列的值进行排序的一种结构
+      (MySQL中用二叉树btree方式)
+    2.优点
+      可以加快数据的检索速度
+    3.缺点
+      1.当对表中的数据进行增加 删除和修改的时候
+        索引也要动态维护，降低了数据的维护速度
+      2.索引需要占用物理空间
+    4.索引类型
+      1.普通索引(MUL)
+        1.创建
+          1.在创建表时创建
+            index(字段名),index(字段名2)..
+        create table t1(
+        id int,
+        name char(20),
+        age tinyint unsigned,
+        index(id),
+        index(name));
+        2.在已有表中创建index
+            1.语法
+              create index 索引名 on 表名(字段名);
+            create index age on t1(age);
+        注意:
+           索引名一般和字段名一样
+        索引的使用规则
+         1.一个表中可以有多个index字段
+         2.字段的值可以重复,且可以为null值
+         3.经常把做查询条件的字段设置为index字段
+         4.index字段的key标志是MUL
+         Key标志总结:
+         "" "pri" "uni" "mul"
+        3.查看普通索引
+          1.desc表名; -->查看key标志为MUL
+          2.show index from 表名; 
+        4.删除索引
+          drop index 索引名 on 表名;
+          注意:删除普通索引只能一个一个的删除
+          示例:
+          drop index id on t1;
+          drop index name on t1;
+
+      2.唯一索引(UNI)
+      3.主键索引(PRI)
+      4.外键索引
+#4.事务和事务回滚
+    1.事务定义:一件事从开始发生到结束的整个过程
+    2.作用:确保数据的一致性
+    3.属性
+      1.原子性:一个事务是不可分割的工作单位，事务中的各个操作要么都做要么都不做
+      2.一致性:事务必须从一个一致性状态到另一个一致性状态
+      3.隔离性:一个事务的执行不能被其他开发的事务干扰
+      4.持久性:一个事务一旦提交，它对数据库中数据的改变就是永久性的
+    注意:
+    1.mysql中默认sql语句结果会自动commit到数据库
+    2.开始写start transaction，自动commit会被禁用,直到我们用commit;或者
+    rollback,终止这个transaction
+    格式:
+    mysql> start transaction;
+           sql 语句1
+           s1l 语句2
+           ...
+           commit;或者 rollback
+    注意:
+    回滚rollback只针对对表记录的操作，增 删 改
+    对库和表的操作无效
+示例:
+ccb:
+create table ccb(
+name char(20),
+money int);
+insert into ccb values("zhuanqian",10000);
+开始转账:
+start transaction;
+updata ccb set money=5000 where name="zhuanqian";
+updata icbc set money=9000 断电了
+rollback
+
+#5.python数据库编程
+1.python数据库接口(Python DB-API)
+  1.定义
+    为开发人员提供的数据库应用编程接口
+  2.支持的数据库
+    MySQL.Oracle.SQL_server,Sybase...
+  3.python提供的MySQL的模块
+  模块:pymysql
+  4.pymysql使用流程
+    1.建立数据库连接
+    2.创建游标对象
+    3.使用有游标的方法和SQL语句操控MySQL数据库
+    4.提交commit
+    5.关闭数据库连接
+   5.建立数据库连接
+    1.语法
+       对象名=pymysql.connect("主机名","用户名","密码","库名")
+    示例:
+    db=pymysql.connect("local","root","123456","python")
+    2.connect对象支持的方法
+      1.cursor() 创建一个游标对象
+      2.commit() 提交到数据库(增删改)
+      3.rollback() 回滚 db.rollback()
+      4.close() 关闭数据库连接
+    3.cursor 关于cursor对象支持的方法 
+      1.execute(op) 执行数据的基本sql命令
+      2.fetchone()  取得结果集的第一行记录
+      3.fetchmany(sizq) 取得结果集的size行记录
+      4.fetchall()   取得结果集的所有行
+      5.close()      关闭游标对象
+

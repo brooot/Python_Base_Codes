@@ -1,0 +1,53 @@
+python 简介
+创始人：guido van rossum （荷兰人）
+时间：１９８９年圣诞节期/home/tarena/桌面/day/day01.txt间
+地点：阿姆斯特丹
+语言的种类：java c c++ python
+python的应用：
+系统运维 网络编程（搜索引擎，爬虫，服务器编程）
+科学计算　人工智能，机器人，云计算，web开发（后端），大数据及数据库编程，教育，游戏，图像。
+python的优点：
+面向对象，免费，可移植，可混合编程，简单易学易用，开发效率高，应用领域广泛，开源
+缺点：与c.c++相比，执行速度不够快。　　
+python的官网：www.python.org
+python的版本：python2.7,python3.5（当前教学版本）python3.7(最新版本）
+python 安装：windows,mac 05 x,linux
+编译型语言：c/c++  ————>机器指令－－－>目标机器
+解释执行型语言：
+java/python --->解释执行器程序（运行于机器上）
+python解释执行器的类型：
+１．cpython(c语言写的）
+２．jpython(java语言写的）
+３．tronpython(基于.框架的）
+４．pypy(python语言写的）
+编写python程序：
+编写ｈｅｌｌｏ.py
+执行python程序
+
+常用的程序文件后缀：py python 源代码，cpp/.cxx/.cc/.c c语言，
+python 的交互模式下编写并执行代码
+进入交互模式:python3<回车>
+退出交互模式：quit()<回车》
+
+
+变量
+　　变量是关联一个对象的符号
+变量的命名方法：
+　　变量必须为字母或下划线开头
+
+赋值语句　
+　　变量＝表达式　　　a=100,b=200   bound(绑定)
+
+is 运算符：
+　　判断两个变量是否绑定一个对象，当时绑定一个对象时返回值为True
+
+del 语句
+　　删除
+
+
+
+
+
+
+
+

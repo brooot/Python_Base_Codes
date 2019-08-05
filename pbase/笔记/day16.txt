@@ -1,0 +1,189 @@
+2017年１２月２５日　　星期一　　第１６天
+
+　　二进制文件
+　　　什么是二进制文件
+　　　文件中以字节（byte)为单位存储不以换行符（\n)
+   为单位进行区分内容的读写方法
+
+F.read()  返回类型：
+    对于文本文件，F.read()返回类型为字符串（str)
+    对于二进制文件，F.read()返回类型为字节串(bytes)
+
+　字节串　bytes (字节序列)
+bytes 类型作用
+    存储以字节为单位的数据
+    字节串是不可改变的序列
+    说明：
+    字节是0~255之间的整数
+创建字的字节串字面值：
+b=b''
+b=b""
+b=bytes() 为空字节串
+创建非空字节串：
+    b=b'ABCD'
+    b=b'1234'
+    b=b'\x41\x41'
+
+字节串的构造函数：
+    bytes() 生成一个空的字节串　　等同于'b'
+    bytes(n) 生成n个值为零的字节串
+    bytes(字符串,encodeing='utf-8')
+    用字符串的转换编码生成一个字节串
+    bytes(整型可迭代对象)　　用可迭代对象初始化
+
+b='123abc'
+b'a' in b  #True
+b'1' in b  #False
+
+索引和切片　（与字符串的相同）
+
+bytes 与 str 区别
+bytes 存储的是字节（０～２５５）
+str   存储的是Unicode字符（０～６５５３５）
+
+bytes 与 str 转换
+str---->bytes
+  b=s.encode(encodeing='utf-8')  编码
+  bytes-->
+s=b.decode(encodeing='utf-8')　　　　解码
+
+字节数组bytearray
+可变的字节序列
+
+    bytearray的构造函数
+    bytearray()   创建空的字节数组
+    bytearray(整数)
+    bytearray(字符串,encodeing='utf')
+    bytearray(整型可迭代对象)
+    bytearray(字节串)
+操作：
++=**<>in not in 注：字节数组可以索引和切片赋值，赋值同列表
+
+bytearray 的方法
+ba.clear()　　　　清空
+ba.append(n)　　　　追加一个字节
+ba.remove(value)　　　　删除第一次出现的字节
+ba.reverse()　　　　字节的顺序进行反转
+ba.decode(encoding='utf-8')
+ba.find(sub[,start[,end]])
+
+python3 内建序列
+str ,list,tuple,bytes,bytearry
+python3 中可变的数据类型
+list,dict,set,bytearry
+
+练习：
+有一个文件，文件内容是'a1b2c3d4',如何得到字符串'1234'和'abcd'
+将上苏文件用bytearray操作，将其改为'A1B2C3D4'
+    f=open('mylianxi.txt','r')
+    s=f.read()
+    f.close()
+    alpha=s[::2]
+    number=s[1::2]
+    print(alpha)
+    print(number)
+
+    s='A1B2C3D4'
+    f=open('mylianxi.txt','w')
+    f.write(s)
+    f.close()
+
+    f=open('mylianxi.txt','r+b')
+    b=f.read()
+    ba=bytearray(b)
+    ba[::2]=[ord(x) for x in 'ABCD']
+    f.seek(0)
+    f.write(ba)
+    f.close()
+    print(b)
+
+标准输入输出文件：
+sys.stdin　　标准输入　　键盘
+sys.stdout　　标准输出　　控制台终端
+sys.stderr　标准错误　控制台终端
+模块名
+
+Linux/Unix  Ctrl +d　　输入文件结束符
+wondows   Ctrl +z　　　　输入文件结束
+
+练习：写一个程序，从键盘输入字符串，存入变量s
+１．将此字符串变为字节串，绑定变量b，并打印出来
+２．打印字符串的的字节串的长度
+３．将b字符串转换为字符串用s2绑定，判断s2与Ｓ是否相同
+
+从键盘输入一些内容，
+请输入：abcd
+请输入：这是一行中文
+请输入：《回车》空行结束
+１．把输入的内容存在文件中，在sublime text 3
+中查看输入的内容是否与输入相同
+２．把此文件复制到windows下，看能否在记事本打开
+
+汉子编码：
+只讲两种：
+国标系列：GB18030(GBK(GB2312))　　一个汉字两个字节
+国际标准：UNICODE<== > utf-8　　　　一个汉字三个字节
+
+GB2312-80 编码：
+１９８０用两个字节表示，编码范围（A1A1-FEFE)
+包含汉字６７６３　　和６８２个全角字符
+
+GBK编码：
+１９９５年制定，用两个字节编码范围（8140-FEFE)（剔除7f),收录２１００３个汉字
+
+GB18030
+  ２００５年制定，收录２７５３３汉字，用两个或四个字节编码
+
+UNICODE编码：
+UNICODE16
+ 16位统一编码（０～６５５３５）
+UNICODE32 
+32位统一编码（０～４２９４９６７２９５(２**32-1))
+
+UTF-8(8-bit Unicode Transformation Format)
+UNICODE------------UTF-8互转
+0000-  007F  一个字节
+0000-  07FF　　二个字节
+0800-  FFFF　　三个字节
+str 字符串存UNICODE16
+ 
+windows默认用GB系列
+Linux/Unix/IOS/MAX  默认用UNICODE
+
+练习：输入多个人的姓名，年龄，成绩，在python3内部将其转换为GDK编码
+，存入文件"infos.csv"中
+文件格式如下：
+小张，２３，８０（换行\r\n）
+小李....
+
+输入完成后，将infos.csv复制到windows上，用excel打开，看能否正常显示
+
+python 编码(encode)
+'gb2312'
+'gbk'
+'gb18030'
+'utf-8'
+'ascii'
+str.encode(encodeing=xxxx)
+
+编码注释：
+在python源文件的第一行或第二行写入如下内容可设置
+源文件的编码格式：
+#-*-coding:gbk-*-
+ #设置源文件为gbk编码
+
+ 练习：
+ １．复制文件的程序mycopy.py,在程序启动后输入    要复制的文字名
+ （路径），输入复制后的文件名后开始复制，复制
+ $ python3 mycp.py
+ 请输入源文件：day16.txt
+ 请输入目标文件：/home/tarena/day16.txt
+ 开始复制....
+ 复制完成
+ 要求：能复制（文本文件和二进制文件）
+
+ ２．修改学生管理系统
+ 　　）11．能保存到excel文件（si.csv)
+   )12.从excel文件中提取信息数据（si.csv) 
+
+

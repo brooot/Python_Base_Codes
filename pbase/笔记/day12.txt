@@ -1,0 +1,208 @@
+2017年１２月19日　　星期二　　第１２天
+装饰器　　decorators
+  装饰器是一个函数，主要作用是用来包装另一个函数或类，
+  包装的目的是在不改变原函数名（或类名）
+  的情况下改变被包装对象的行动
+
+函数装饰器函数　　function decorators
+　　是指传入的是一个函数，返回的是一个函数
+装饰器函数的语法：
+　　def 装饰器函数名（参数）：
+　　　　　　　语句块
+　　　　　　　return 函数对象
+函数装饰器的修饰语法：
+　　＠装饰器函数名<换行>
+  def 被装饰函数名（参数列表）
+  　　　　语句块
+示例：
+def mydeco(fn):
+    return fn
+@mydeco
+def myfunc():
+    print('mydeco被调用')
+myfunc=mydeco(myfunc)   #@mydeco
+myfunc()
+myfunc()
+myfunc()
+多次调用的myfunc,
+
+获取函数的调用时间：
+import time
+def check_time(fn):
+    def myplay(t,f):
+        n=time.time()
+        fn(t,f)
+        n2=time.time()
+        print('总时间：',n2-n)
+    return myplay
+@ check_time
+def play(Title,frame):
+    print('正在播放：',Title,'的',frame,'帧')
+    # time.sleep(3)
+    for x in range(10000):
+        pass
+
+play('猫和老鼠:',1)
+play('猫和老鼠:',2)
+play('猫和老鼠:',3)
+
+
+函数的文档字符串：
+　　是指在函数定义语句中，第一次出现的没有赋值给任何变量的字符串为文档字符串
+语法：
+　　def 函数名（参数列表）
+　　　　　　'文档字符串'
+　　　　　　语句块
+说明：
+　　文档字符串通常用来说明本函数的功能和使用方法
+　　在解释执行器下输入>>>help(函数名)可以查看文档字符串
+示例：
+def myfunc():
+    """这是我自己定义的函数
+    　　　用来示意文档字符串
+    　　　myfun()没有参数
+    """
+
+python3 中的参数注释
+语法：
+　　　　def 函数名（形参名１[:形参注释1],形参名2[:形参注释2],..)[->函数注释]：
+示例：
+def myadd(a:'第一个参数',b:'第二个参数')->int:
+    '''这是参数注释示例'''
+    pass
+
+def 语句的完整语法：
+　　　　[@ 装饰器函数名]
+　　　　def 函数名([位置形参],[*元组形参],[命名关键字形参],[**字典形参])[->注释表达式]:
+　　　　　　'文档字符串'
+　　　　　　语句块
+函数的属性：
+__name__属性：
+　　　　__name__属性用来记录函数的名称
+说明：以双下划线开头，以双下划线结尾的标识符通常代表python的特殊属性
+示例;
+def abc():
+    pass
+fn=abc 
+print('a绑定函数名称是：',fn.__name__)
+
+__doc__属性：
+　　用于记录函数的文本文档
+示例：
+def cba():
+    '这是cba函数的文本字符串：'
+    pass
+print(cba.__doc__)
+
+面试题：
+l=[1,2,3]
+def f(n=0,lst=[]):
+    print(lst)
+    lst.append(n)
+f(4,l)
+f(5,l)
+
+模块　module
+包含一系列变量，函数，类，等的程序组
+模块是以文件为单位的，模块文件通常以.py结尾
+作用：让一些相关的变量，函数，类有逻辑的组织在一起，使逻辑
+结构更加清晰
+２．模块中的变量，函数，类可提供其他模块或程序使用
+模块的分类：
+　　　内建模块（builtins),在解析器内部可以直接使用，
+　　　安装的标准库模块，安装Python时已经安装，也可以直接使用
+　　　第三方模块（通常为开源,经常用pip命令安装）需要自己安装
+　　　用户自己编写的模块（可以作为其他人的第三方模块）
+模块的导入：
+import 语句
+格式：
+import 模块名[as 模块新名][,模块名２]
+作用：将某模块整体导入到当前模块中
+用法：
+模块名.属性名
+
+用法示例：
+　　print('5的阶乘是：',math factorial(5))
+查看模块中变量和函数的方法：
+　dir(obj) 函数，返回所有属性的字符串列表
+　help(obj) 函数，查看模块相关的文档字符串
+
+练习：
+１．输入一个圆的半径，求圆的周长和面积
+２．已知一个正方形的面积为２０，求此正方形的边长，
+　　　sqrt(x),求平方根
+
+from import 语句
+语法：
+　　from 模块名　import 模块属性名[as 属性名新名][,模块属性名２[.....]]
+作用：
+将某模块内的一个或多个属性导入到当前模块的作用域
+示例：
+from math import pi
+from math import factorial as fac
+
+from import * 语句
+语法：
+from 模块名　import*
+  将某模块的所有属性导入当前模块
+示例：from math import *
+
+dir 函数
+dir([对象])　　返回字符串的列表
+作用：
+１．如果没有参数调用，则返回前作用域的所有变量的列表
+２．如果给定一个对象做参数，则返回这个对象的所有变量的列表
+）１．对于模块，返回这个模块的全部属性
+）２．对于类对象，返回所有类变量，并递归基类对象的所有变量
+）３．对于其他对象，返回所有变量，递变量和基变量
+
+内置模块（内建模块）
+　builtins ,sys ,time, itertools,  posix...
+标准库模块：
+　random, math, os, functools,xml..
+数学模块　math
+ 变量
+ math.e  自然对象的底，　　　math.pi   
+ 函数：
+ math.ceil(x)  对x向上取整　x=1.2    返回２
+ math.floor(x)  对x向下取整　x=1.2　　　　返回１
+ math.sqrt(x)
+ math.factorial(x)  x的阶乘
+ math.log(x[,base])   返回以base为底x的对数不给base，默认e为底
+ math.degrees(x)  弧度转角度
+ math.radians(x)  角度转弧度
+
+ 时间模块　time
+ 时间简介：
+公元纪年　００００年１月１日０：０：０　
+计算机元年　１９７０年１月１日０：０：０开始
+     Linux/unix
+utc 时间
+     Greenwich
+DST 阳光节约时间
+
+时间元组：　是一个９个整数元组组成的
+　　年，月，日，时，分，秒，星期，元旦，夏令时
+
+time.timezone 本地区与UTC时间差
+函数：
+time.time() 　　　返回计算机元年到现在的时间秒
+time.sleep(secs)   让程序睡secs秒
+time.gmtime([secs]) 将秒数转为UTC表达的时间元组
+time.asctime([secs]) 将时间元组转为日期时间字符串
+time.mktime(tuple)   将本地时间元组转换为计算机元年秒数
+time.localtime([secs])　将UTC时间转换为本地时间元组
+
+练习：
+2.打印一个电子时间：
+格式为　　　HH:mm:ss
+3.编写一个闹钟程序，启动时设置定时时间，到时候打印一句语句，然后退出
+4.看懂下面的程序在在做什么：
+def fn(f,x,y):
+    print(f(x,y))
+fn((lambda a,b:a+b),100,200)
+fn((lambda a,b:a**b),3,4)
+
+
+
+

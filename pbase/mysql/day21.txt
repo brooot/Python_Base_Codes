@@ -1,0 +1,175 @@
+2017年1月2日　　星期二　　第２１天
+姓名：王伟超
+邮箱：wangweichao@tedu.n
+1.MySQL概述
+１.什么是数据库
+数据库是一个存储数据的仓库
+２．都有那些公司用？
+金融机构，游戏网站，购物网站，论坛网站
+３．提供数据库服务的软件
+MySQL,SQL_Server,Oracle,DB2,MariaDB,MongoDB..
+在使用中选择哪一个数据库？
+１．是否开源
+开源软件：MySQL,MariaDB,MongoDB
+商业软件：Oracle,DB2,SQL_Server
+2.是否跨平台
+不跨软件：SQL_Server
+跨平台：MySQL,Oracle,DB2,MariaDB,MongoDB
+３．公司的类型
+商业软件：政府部门，金融机构，
+开源软件：游戏平台，网购网站，论坛网站
+４．MySQL的特点
+１.关系型数据库
+　　　数据是以行和列形式去存储的
+　　　这一系列的行和列称为表，表中每一行叫一条记录，
+　　　表中每一列叫一个字段，表和表之间的逻辑关联叫关系
+　　　关系型数据库的核心内容是关系既二维表
+　　　
+２．跨平台
+　　　可以在Unix,Linux Windows
+３．支持多种编程语言
+　　　python ,java,
+启动和链接MySQL服务   
+１．启动
+　查看MySQL服务状态
+　sudo　/etc/init.d/mysql status
+　停止MySQL服务
+　sudo　/etc/init.d/mysql stop
+ 启动MySQL服务
+ sudo　/etc/init.d/mysql start
+ sudo　/etc/init.d/mysql restart
+ 2.连接
+ Mysql -u用户名　-p密码
+ 　　SQl命令的使用规则
+ 　　１．每条命令必须以;结尾
+ 　　２．SQL命令不区分大小写
+ 　　３．使用/c终止命令的执行
+库的管理：
+　　　查看已有的库：　　　　show databases;
+   创建库：　　　　　　　　　create database　库名;
+   切换库：　　　　　　　　　use 库名
+   查看当前所在库：　　　select database();
+   查看库中所有的表：　　show tables;                                                       
+   删除库：　　　　　　　　　　drop database 库名;
+
+库的命名规则：
+　　可以使用数字，字母，下划线，但不能纯数字
+　　库名区分字母大小写
+　　库名具有唯一性
+　　不能使用特殊字符和mysql关键字
+创建表：
+　　create table 表名（字段名　数据类型）;
+
+查看表结构：
+  desc 表名;
+在表中插入记录
+  insert into 表名　values(值)，(值２);
+  insert into stuinfo　values('jim',20,100);
+查看表记录：
+  select * from 表名；
+删除表
+  drop table 表名
+  drop table 
+
+表的命名规则（同库的命名规则）
+
+客户端把数据存储到数据库服务上的过程
+　１．连接到数据库服务器
+　２．选择一个库　use库名
+　３．创建表或者修改表　create table
+ ４．断开与数据库服务器的连接　exit quit \q
+
+ 名词介绍
+ １．Db(Datable)数据库存储数据仓库
+ 2.DBMS(Database Management System)
+ 数据库管理系统
+ ３．DBS(Database System)
+ 数据库系统
+ DBS=DB(存储)＋DBMS(数据库软件)＋数据库应用（财务，人事管理系统）
+ ４．ER模型
+ 实体关系模型　　　　　　　
+
+ 所有的数据都是以文件的形式存储在数据库目录下，
+ 数据库目录：/var/lib/mysql
+
+ 数据类型：
+ １．数值类型
+ 　　　1.int 大整型（４个字节）
+ 　　　存储范围０～２**32
+    tinyint 微小整型
+    　　　有符号（－１２８～１２７）
+    　　　无符号unsigned 0~255
+    　smallint 小整型（２个字节）
+　　　　　bigint  极大整型　８字节　２**64　
+    　2.浮点型
+    　　　float (4 个字节)
+    　　　用法：字段名　float(m,n) #m表示总位数，n小数位位数
+　　　　　　　注意：浮点型插入整数时，mysql会自动补全小数点位数，
+　　　　　　　如果插入数据时，小数位数多余指定位数，会对指定位数的下一位进行四色五入
+　　　　　　　double(8个字节)
+　　　　　　　　　字段名　double(m,n)
+　　　　　　　decimal
+         字段名　decimal(m,d)
+         m>d   m+2个字节的存储空间
+         m<d   d+2个字节的存储空间
+       #数值类型的宽度为显示宽度，只用于select查询显示和占用存储空间大小无关
+       用zerofill展示效果，字符类型的宽度超过则无法存储  
+ ２．字符类型
+　　　　１．char(定长)　　　＃性能高　浪费存储空间
+　　　　　　　取值范围1~255个字符
+　　　　２．varchar(变长)　　性能低　　节省存储空间
+　　　　　　　取值范围1~65532 
+ ３．枚举类型：　
+ 　　　　　定义：字段只能在列表范围内选择
+ 　　　　１．enum 单选
+ 　　　　　　语法：字段名　enum(值１...)
+     2.set 多选
+     　　语法：字段名　set(值1,值２...)
+ 　　　　
+ ４．日期时间类型
+     1.year:年yyyy
+     ２．date:日期yyyymmdd
+     3.time:时间hhmmss
+     4.datetime:日期时间yyyymmddhhmmss
+
+insert into 表名　value(值)，(值２);
+)default charset=utf8 #可以中文输入
+５．如何设置表的字符编码
+　　　１．查看表的字符编码
+　　　　　　show create table 表名；
+　　　　　＃default charset=???
+   2.创建表的时候指定字符编码
+   　　create table 表名
+６．表字段的操作：
+语法：alter table 表名　执行动作；
+　１．添加一个字段
+　　　　alter table 表名　add　字段名　数据类型；
+　　　　alter table t20 add address varchar(30);
+2.添加到指定位置
+　　　　alter table t20 add address varchar(30) after 字段名；
+3.删除
+　　　　alter table t20 drop 字段名　
+４．修改字段的数据类型：
+alter table 表名 modify 字段名　新的数据类型;
+alter table t20 modify score　tinyint;
+
+作业：
+１．面试题
+　　１．填空题
+　　　　１．MySQL中的数据类型_ _ _ _ 
+    ２．关系型数据库中的核心内容是_ 及__
+  2.简答题
+  　　１．什么是ER模型，请举例说明
+  　学生选课系统，为了减少数据的冗余，设计三张表，学生信息表记录学生信息，课程表
+  用来记录课程信息，教师表用来记录授课老师信息
+  　　２．简述客户把数据库存储到数据库服务器上的过程
+  　　３。char 和varchar 的区别各自的特点
+２．操作题
+创建一个学校的库school
+在库中创建一个表students 来储存学生信息
+学号（显示宽度３位，０填充）
+姓名，年龄（不能输入复数），成绩（浮点型），性别（单选），爱好（多选）
+　　入学时间date
+3.查看一下students 的表结构
+４．在students之中增加一个字段id，加在第一列
+５。在表中随意插入５条记录，并查看记录　　

@@ -1,0 +1,162 @@
+2017年1月4日　　星期四　　第２３天
+
+１．外键约束
+　　１．定义：让当前表字段的值在另一个表的范围内选择
+　　２．foreign key(参考表名)
+　　　　　references 被参考表名（被参考字段名）
+　　　　　on delete 级联动作（cascade)
+     on update 级联动作（cascade)
+  3.使用规则
+  　　１．两张表被参考字段和参考字段数据类型要一致
+  　　２．被参考字段必须是key的一种，通常primary key
+主表
+    create table jftab(
+    id int primary key,
+    name char(20),
+    class varchar(25),
+    money int
+    )default charset=utf8;
+班级学生信息表
+    create table bjtab(
+    stu_id int,
+    name char(20),
+    money int,
+    foreign key(stu_id) references jftab(id)
+    on delete cascade
+    on update cascade
+    )default charset=utf8;
+注意：
+删除主表中记录时，从表记录会同步删除
+修改同步（update),只针对主表被参照字段时，从表参照字段才会级联更新
+在从表中插入记录时，如果参照字段的值没有在主表被参照字段中，则不允许
+
+删除外键约束
+    alter table 表名　drop foreign key 外键名；
+外键名的查看方式
+    show create table 表名；
+在已有表中添加外键
+    alter table 表名　add
+    foreign key(参照字段名)
+    references 表名（被参照字段名）
+    on delete cascade
+    on update cascade
+3.数据导入
+　　１．作用：把文件系统的内容导入到数据库中
+　　２．语法：
+　　　　load data infile '文件名'
+　　　　into table 表名
+    fields terminated by '分隔符'
+    lines terminated by '\n'
+用户名　　密码　uid　　gid
+tarena:x:1000:1000:
+用户描述　　　　　　主目录　　　　　　　　　登录权限
+tarena,,,:/home/tarena:/bin/bash
+thread
+操作：
+１．在数据库中创建相应的表
+create table userinfo(
+username char(20),
+password char(1),
+uid int,
+gid int,
+comment varchar(50),
+homedir varchar(50),
+shell varchar(50)
+);
+２．将要导入的文件拷贝到数据库默认搜索路径
+   1.如何查看数据库默认搜索路径
+   show variables like 'secure_file_priv';
+   /var/lib.mysql-files/ 
+   2.sudo cd /etc/passwd/var/lib.mysql-files/
+
+   (sudo cd /etc/passwd/var/lib.mysql-files/)
+３．将系统文件导入到创建的表中
+load data infile '/var/lib/mysql-files/passwd'
+into table userinfo
+fields terminated by ':'
+lines terminated by '\n';
+
+4.数据导出
+　作用：将数据库中表的记录保存到系统文件中
+　语法：
+select ...from 表名　into outfile "文件名"
+fields terminated by "分隔符"
+lines terminated by '分隔符';
+
+mysql> select username,password,uid from userinfo
+    -> into outfile '/var/lib/mysql-files/userinfo.txt'
+    -> fields terminated by '   '
+    -> lines terminated by '\n';
+主界面查看：
+sudo -i
+cd /var/lib/mysql-files/
+ls
+cat userinfo.txt
+注意：
+１．导出的内容由sql查询语句决定
+２．执行导出命令时路径必须指定在对应的数据库目录下
+
+将mysql库下的user表中的user,host两个字段的值导出到
+user2.txt,将其存放在数据库目录下
+select user,host from mysql.user
+into outfile '/var/lib/mysql-files/user2.txt'
+fields terminated by ':'
+lines terminated by '\n';
+
+5.嵌套查询
+定义：把内层的查询结果作为外层查询的条件
+语法：
+sql 查询语句where 条件（sql查询语句）；
+mysql> select username from userinfo
+    -> where username in (select user from
+    -> mysql.user where
+    -> host='localhost' and user='root');
+６．多表查询
+１．表的复制
+    　１．语法：
+        　　cteate table 表名　select 查询命令；
+        　示例：
+        　１．复制userinfo表的全部记录和字段，userinfo2
+        mysql> create table userinfo2
+            -> select * from userinfo;
+        　２．复制userinfo表的前１０条记录，userinfo3
+        mysql> create table userinfo2
+
+         3.复制userinfo表的username,password,uid三个字段
+         的第２~10条记录
+        mysql> create table userinfo4
+    -> select username,password,uid from userinfo limit 1,9;
+        注意：
+        　　复制表的时候不会把原有表的键　属性复制过来
+　　　２．复制表结构
+　　　　　　１．语法：
+　　　　　　　create table 表名　select 查询命令　where
+       false;
+       示例：
+       create table userinfo2　select * from userinfo;
+        练习＋环境准备：
+        １．创建t1表，包含userinfo表中的
+        　username,uid,shell三个字段的前２条记录
+    　　　　２．创建t2表，包含userinfo表中的
+    　　　　　username,uid,gid,homedir四个字段的前３条记录
+　　　　　２．select 字段名列表from 表名列表　where 条件；
+　　　　　　　示例：
+　　　　　　　１．找到t1表和t2表中相同的用户名，全部显示信息
+　　　　　　　　　select * from t1,t2 where t1.username=t2.username;
+７．连接查询
+　　１．create table t3 select username,uid from
+    userinfo limit 2;
+  2.create table t4 select username,uid from　　　　
+    userinfo limit 3;
+   左连接：
+   定义：以左边的表为主显示查询结果
+   语法：select 字段名　from 表１ left join 表２　on 条件;
+   select * from t3 left join t4 on t3.username=t4.username;
+   右连接：
+   select * from t3 right join t4 on t3.username=t4.username;
+
+明日讲课内容：
+１．索引
+２．事物和事物回滚
+３．mysql的备份和恢复
+４．python数据库编程

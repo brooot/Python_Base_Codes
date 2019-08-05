@@ -1,0 +1,224 @@
+ MongoDB
+
+程序＝算法＋数据
+外存储器存储数据：文件，数据库
+数据存储的发展
+
+文件管理阶段（word excel)
+数据库系统阶段
+数据组织化结构好，冗余度变小，容易扩充，方便自动处理，查找效率高
+
+数据：能够输入到计算机并被识别和｀处理的信息集合
+数据库：是按照数据结构组织，存储和管理的仓库，是在数据库管理系统
+　　　　　和控制下存放在介质上的数据集合
+数据库管理系统：管理数据库的软件，用于建立，使用和维护数据库结构内容
+
+数据库系统：是由数据库，数据库管理系统，开发工具等共同构成的一个集合
+
+关系型数据库：采用关系模型来组织数据结构的数据库
+Oracle  DB2  SQLServer   MYSQL sqlite
+优点：容易理解，使用方便，通过sql语句操作，而sql语句非常成熟
+　　　　　　易于维护，完整性好，降低了数据冗余，数据一致性高
+　　　　　通用化程度高，技术成熟，可以使用外联结操作
+缺点：无法满足高并发需求－－－数据的每次操作都需要sql语句的解析，
+　　　　　　　　导致高并发下读写性能不足
+　　　　　针对海量数据的爆发，数据库系统在性能上显得力不从心，因为关系
+　　　　　　　　型数据库每一步操作都加锁
+　　　　　扩展性不足，普遍难以横向扩展，当数据增加到一定程度，现有
+　　　　　　　数据库很难通过添加硬件和节点进行扩充
+
+非关系型数据库（NoSQL)   not only sql
+
+优点：大数据下书写能力强，支持分布式，易于扩展，弱化数据结构，数据结构
+　　　　简单
+缺点：缺少join等复杂操作功能，通用性差，结构的灵活也需要更灵活操作，
+　　　　容易混乱，没有标准的语句
+
+NoSQL使用情况：
+１．数据模型简单
+２．对数据的我一致性要求低
+３．对数据库的并发处理性能要求高
+４．对数据库的扩展性有一定需求
+５．给定key可以比较方便映射数据结构
+
+非关系型数据库分类：
+
+键值存储数据库:Redis  oracle  BDB   Tokyo
+列存储数据库：　HBase
+文档型数据库：键值型数据库的升级版，　Mongodb   CouchDB
+图形数据库：
+
+要求：知道Nosql 分为几类，mongo是哪一类　
+
+MongoDB
+1.分布式文档型NoSQL
+2.由c++编写
+３．支持数据格式松散，类似json的Bson格式
+４．最类似于关系型数据库的非关系型数据库
+
+特点：
+高性能，易部署，存储方便
+如果负载增加方便扩展，支持的查询操作相对其他的Nosql非常丰富
+支持众多编程语言接口，（ruby,python c++  c# PHP)
+使用bson格式　
+
+mongodb的安装
+指定目录安装
+１．下载对应的版本mongodb文件包
+２．将文件包移动到某个目录下（/user/local  /opt)
+3.解压文件夹
+tar -xvf mongodb-linux-x86_64-ubuntu1604-3.4.10.t
+4.解压后进入文件夹将bin目录添加到环境变量
+在/etc/base.bashrc  加上
+PATH=$PATH:/etc/local/mongdb-..../bin/export PATH
+5.添加后重启环境
+source /etc/base.bashrc
+6.设置数据库默认路径
+sudo mkdir -p /data/db
+
+自动安装
+sudo apt-get update
+sudo apt-get install mongodb
+#那么默认数据库创建位置　/var/lib/mongodb
+配置文件位置 /etc/mongodb.conf
+mongo 命令位置　　/user/bin  这个目录一定是环境变量
+
+
+启动mongod服务
+mongod --dbpath /xxx/yyy  指定数据库路径
+
+启动mongo shell
+mongo
+注意：支持JavaScript
+默认使用的端口号27017 
+
+mysql     mongodb          含义
+database  database       数据库
+table     collection     表／集合
+row       decument       记录／文档
+column    field          字段／域
+index     index          索引
+primary key primary key  主键　mongo中自动添加主键
+－－－－－－－－－－－－－－－－－－－－－－－
+数据库创建
+
+use databasename
+创建一个名字为stu得数据库
+use stu
+查看数据库：show dbs
+数据库的命名规则
+１．数据库的名词可以是满足以下条件的任意utf-8字符串
+２．不能是“”空字符串
+３．不能含有空格('')点　(. ) '/'   '\0' '\'
+4.应该全部小写
+５．不要超过６４个字节
+６．不要使用admin  local  config,这个三个名字是系统已经创建好的
+
+admin:存储用户和 权限
+local:不会被复制，只能用于本地单台服务器访问
+config:分片处理的时候，保存分片信息
+
+quit()  退出mongo shell
+show dbs 显示当前数据库
+db      表示一个全局性变量，显示当前正在use的数据库
+　　　　　　　　如果没有进行任何use操作那表示test（系统自动创建）
+
+数据库的备份和恢复
+备份：mongodump -h dbhost -d dbname -o dbdir
+  eg:  mongodump -h 127.0.0.1 -d stu -o student
+恢复　　　mongorestore -h <hostname>:<port> -d dbname <path>
+ eg:mongorestore -h 127.0.0.1:27017 -d student student/stu
+
+数据库检测
+ $:mongostat
+ insert（每秒插入次数） query（每秒查询次数） update（每秒更新）
+  delete（每秒删除） getmore command（统计每秒运行命令）
+   dirty used flushes（每秒向硬盘写入次数） vsize（使用的虚拟内存）
+      res（使用的物理内存） qrw arw net_in net_out conn 
+
+mongoop  检测每个数据库的读写时间
+
+删除数据库　当前使用的
+db.dropDatabase()
+
+集合的创建
+db.createCollection(collection_name) 
+#创建一个叫'class2'集合
+db.createCollection('class2')
+展示当前数据库中的所有集合：
+show collections
+
+集合就是mongo当中文档组
+同一类文档应该集中存储，便于管理
+集合中可以使用不同格式的文档
+集合中集中存储格式类似的文档，可以提高访问效率
+
+集合的命名规则
+１．不能是空字符串
+２．不能含有'\0'
+３．不能以'system.'开头，这个是系统保留集合的前提
+４．集合名不要和保留字重名，不要包含'$'
+
+创建集合２
+当向一个集合中插入一条文档，集合会被自动创建，这也是我们
+通常使用的方法
+eg:
+
+   db.class3.insert({'name':'wang','age':15,'sex':'boy'})
+删除集合：
+db.collection_name.drop()
+
+文档
+bson格式的数据
+bson 是　json的进化　
+
+文档的键命名规则：
+１．一般来说是是utf-8格式的字符串
+２．键中不能有'\0'，不能空字符串
+３．一般不会用.和$
+4.以_ 开头的都是保留的键，所有尽量不用
+
+注意事项：
+　文档的键值对是有序的
+　文档的值指的就是文档支持的数据类型
+　Mongodb区分大小写
+　键不能有重复
+
+mongo支持的数据类型：
+字符串　　utf-8格式的字符串是合法
+整型　　　　分为32位整型　　　６４位整型
+布尔　　　　真　　假
+浮点型　　　存储小数
+arrays  用来存储列表或者数组
+Timestamp 时间戳
+object  内部文档　｛'dic':{}}
+Null    空值
+Symbol  同字符窜类型　　但是多用于存储特殊符号语言
+Date    日期时间
+objectId objectid 子串　　　　
+Binary data 二进制数据
+code    代码，js代码
+regex   正则表达式
+
+ObjectId("5a6065c770260fa839655d81")
+24个十六进制数，用作系统自动生成的　_id   (key)
+前8位　　文档创建的时间，
+６　　　　　机器id
+4     进程id
+6     计数器
+
+插入文档:
+插入文档时域名可以不加引号
+db.collectionName.insert()
+插入多条数据
+
+db.collectionName.save()
+当不加_id时插入数据与insert相同，当插入文档有_id时，如果_id不存在则正常插入，
+如果_id存在，则变为修改原来数据
+
+作业：
+１．联系mongo数据库，集合，创建删除语句
+２，对文档熟练插入
+３．对比关系型数据库描述非关系型数据库的特点
+４．复习进程线程网络代码
+

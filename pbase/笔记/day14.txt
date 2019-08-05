@@ -1,0 +1,132 @@
+2017年１２月21日　　星期四　　第14天
+object是变量
+
+python　调试器pdb 模块(python debug module)
+　　pdb 是个模块，主要用于调试
+作用：可以跟踪程序流程，实现单步执行，进入函数执行等操作
+　　在运行时查看变量的值
+启动方法：
+＃python3 -m pdb xxx.py
+说明：
+　　-m 后跟python模块，可以自动加载
+pdb 调试命令：
+l/list  列出源码
+q/quit　　退出pdb调试
+h/help  查看帮助
+p　表达式　运行表达式并返回结果
+n/next  执行当前语句，进入下一条
+c/cont/continue 继续运行，直到下一条
+b/break   设置断点
+cl/clear  清除断点
+s/step    进入到函数内部执行
+r/return  持续进行，直到函数返回
+w/where   打印当前的函数调用栈
+pdb 断点的设置方法：
+１．文件名：行号
+　　（pdb）　b myrange.py:13
+2.当前文件的行号
+　　　（pdb) b１４　＃等同于myrange.py:13
+３．函数名：
+　　　（pdb）　b myrange.py
+４．模块，函数名
+　（pdb）games.contra.play
+
+异常　exception（基础）
+是什么是错误
+　　错误是指由于逻辑或语法等导致程序无法正常运行
+异常是程序出错误时标识的一种状态，当异常发生时，程序不会再向下执行
+而转去调用此函数的地方待处理错误并恢复为正常状态
+异常作用：
+　　通知上层的调用者，有错误产生需要处理，用做信号传递
+try 语句的两种语法：
+　　try-except 语句
+　　try-finally 语句
+try-except 语法：
+try:
+  可能触发异常的语句....
+  except 错误类型１[as 变量１]
+  　　　　异常处理语句１
+  except 错误类型２[as 变量２]
+  　　　　异常处理语句２
+  ......
+  except:
+      其他异常处理语句
+　　else:
+      未发生异常处理语句
+　　finally:
+      最终语句
+作用：
+　　　捕获异常，将程序转化为正常状态
+语法说明：
+　　as　子句是用来绑定错误对象的变量，可以省略
+　　except 子句可以一个或多个，但至少一个
+　　else 子句最多只能有一个，可以省略
+　　finally 子句最多只能有一个，可以省略
+python中的错误类型
+,>>>help(__builtins__)
+ZeroDiversionError　　除零
+StopIteration　　　　　　　迭代器没有更多值
+IOError　　　　　　　　　　　　　输入输出错误
+InportError　　　　　　　　　导入模块失败
+IndexError　　　　　　　　　　序列没有此索引
+IndextationError　　　　缩进错误
+ValueError　　　　　　　　　　传入无效值
+AssertionError　　　　　　断言语句失败
+NameError　　　　　　　　　　　未声明或初始化失败
+AttributeError　　　　　　对象没有这个属性
+
+try-finally
+try:
+    可能触发异常的语句
+finally:
+    最终语句
+语法说明：
+finally 子句不可以省略
+此语句一定不存在except子句
+作用：
+１．通常try/finally语句做触发异常时必须要做的事情
+　　无论异常是否发生，finally都会被执行
+２．try-finally不会改变程序状态，无论正常异常
+
+raise 语句
+作用：生成一个错误，让程序进入异常状态
+语法：
+raise 异常类型
+或
+raise 异常对象
+
+assert 语句（断言语句）
+
+assert 语句的语法：
+　　assert 真值表达式，错误数据（通常为字符串）
+作用：
+当真值表达式为False时，用错误数据创建一个AssertionError
+类型的错误，并进入异常状态，用在函数调用特别是栈
+def get_score():
+    score=int(input('请输入成绩：:'))
+    assert 0<=score<=100,'成绩超出范围哦'
+    return score
+score=get_score()
+print('学生成绩为：',score)
+等同于：
+　　if 真值表达式＝＝False:
+     raise AssertionError
+
+练习：
+１．一个球从１００米高空落下，每次落地后反弹高度为原来的一半，
+写程序算出球第１０次落地后的反弹高度和此球共经过多少米
+２．分解因数，输入一个正整数，分解质因数，如输入：９０，则打印
+'90=2*3*3*5'
+3.改写学生管理系统
++-----------------------+
+|)1添加学生信息            |
+|)2显示所有学生信息         |
+|)3删除学生信息            |
+|)4修改学生成绩            |
+|)5按学生成绩高到低显示信息  |
+|)6按学生成绩低到高显示信息  |
+|)7按学生年龄高到低显示信息  |
+|)8按学生年龄低到高显示信息  |
+|)9退出                  |
++------------------------
+考虑分为模块

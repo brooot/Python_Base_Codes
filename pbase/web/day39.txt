@@ -1,0 +1,189 @@
+zhaoxu@tara
+WEB基础
+１．HTML-HTML5
+2.CSS-CSS3
+3.JavaScript-JS
+
+1.WEB概述
+　　　　１．WEB就是互联网上的一种应用程序－网页
+　　　　　　　　１．c/s   c:client   s:Server
+     　　　2. b/s    b:Browser浏览器　　　　s:Server服务端
+  　　2.WEB组成和运行流程
+  　　　　　　１．由服务器，浏览器和通信协议组成
+      　　　　　　服务器：接收用户请求并给出响应的一台机器
+      　　　　　　浏览器：代替用户向服务器发送请求（User Agent)
+            通信协议：http (Hyper Text Transfer Protocal)端口80    
+            https（）443
+            request(请求)　　response(响应)
+    ２．服务器
+    　　　　作用１．用于接受用户的request并发给出响应
+    　　　　　　　２．存储web上的信息（图片，音视频）
+    　　　　　　　３．具备基本的安全功能
+　　　　　　　　产品１．apache
+            2.TOMCAT
+            3.IIS
+            4.Nginx
+        技术：１．python web - Django
+            2.JSP
+            3.PHP
+            4.ASP.NET
+    3.浏览器
+    　　　　作用：代替客户向服务器发送请求，作为响应数据（html,css,js)的解释引擎
+    　　　　主要产品：
+    　　　　　　1.Microsoft IE
+          2.Google  Chrome
+          3.Mozilla Firefox
+          4.Apple Safari
+          5.Opera Opera
+          浏览器主要靠内核来解释数据，内核包括１．内容排版引擎－HTML,CSS
+              2.脚本解释引擎－Javascript
+        浏览器技术：HTML,CSS，Javascript
+    什么是HTML
+        Hyper Text Marukup Language
+        超级　　　文本　　标签　　　　　语言
+        W3C:World Wide Web Consortium(万维网联盟)
+        超文本：具备特殊功能的文本，a 超链接的功能  b:加粗显示文本
+        Marukup:超文本的组成形式　　例如<>   <a>
+    2.HTML 在计算机中的表现
+    　　以.html  or   .htm  作为结尾的py文件
+    　　开发工具：Editplus,Sublime,Dreamweaver, 
+    3.标记语法：在网页中用于表示功能的符号成为“标记／标签／元素
+    　　使用时候用<>括起来
+    　　１．双标记
+    　　　由开始标记和结束标记组成
+    　　　<标记>内容</标记>
+    　　<a>....</a>
+      <b>....</b>
+      <title>..</title>
+      2.单标记：只有一个标记，既能表示开始又能表示结束
+        <标记>or  <标记/>
+        1.<br> or <br/>换行功能
+        2.<hr> or <hr/>一条横线
+        3.<img> or <img/> 图片
+        4.<input> or <input/> 表单控件
+        5.<meta>  or <meta/> 元数据
+      ３．标记的嵌套
+        在某对标记中，又出现了其他的标记，相当于功能的嵌套
+        <a><b></b></a>
+        嵌套注意格式，前面加缩进
+　　　　　　４．属性和值
+　　　　　　　　在标记中，用来修饰显示效果的就是属性
+　　　　　　　　语法：
+　　　　　　　　　１．属性必须声明在开始标记中
+　　　　　　　　　　<标记　属性声明></标记>
+　　　　　　　　　　２．属性和标记名称之间用空格隔开
+　　　　　　　　　　３．属性和值用=连接，并且属性值要用“”
+　　　　　　　　　４．一个元素允许有多个属性，多属性间排名不分先后，用空格隔开
+      常用属性：
+      　　　　１．id
+             表示元素在网页中独一无二的标识，主要在css和js中使用
+　　　　　　
+　　　　　　4.html注释
+　　　　　　　　　　　<!--注释内容-->
+　　　　　　　　　　１．注释不能出现在<>中
+          2.注释不能嵌套
+３．HTML文档结构
+　　　　１．文档类型声明
+　　　　　　　出现在网页的最顶端的一句话（第一句话）
+　　　　　　　作用：告诉浏览器当前网页使用的HTML版本
+       <!doctype html>
+    2.html页面
+    　　在文档类型声明之下，用一对html标记组成
+    　　作用：表示一个网页的开始和结束
+      html 中包含两对子元素：
+      １．<head></head> 网页头部：起到控制网页作用
+      2.<body></body>　　网页主题：起到展现内容的作用
+    <html>
+    </html>
+    ３．<head></head>
+      1.title:表示网页标题，出现在浏览器的标题栏上
+      <title>标题</title>
+      2.meta
+      单标记，允许指定网页编码的格式
+      <meta charset="utf-8">
+      meta 标记必须要出现在head 的顶端
+    4.文本：
+    　　１．HTML中的特殊字符
+    　　　　&nbsp;表示一个空格
+    　　　　&lt;表示一个小于符号<
+        &gt;
+        &copy;表示©　　　版权
+        &yen;表示￥
+      2.
+        标记
+        １．<i></i>:斜体
+        ２．<b></b>:粗体
+        ３．<s></s>:删除线显示文本
+        ４．<u></u>:下划线显示文本
+        ５．<sup></sup>:上标
+        ６．<sub></sub>:下标
+      3.特点
+      　　该组标记会与其他内容在行内显示
+    5.标题标记
+    　　h1:一级标题，文字最大
+    　　h6:六级标题，文字最小
+      改变文字大写以及加粗
+      每个标题都会具备垂直空白距离
+      每个标题独占一行
+      每个标题都具备一个属性
+      属性：align
+      取值：left 左对齐　　　center 居中对齐　　right 右对齐
+
+  6.段落元素
+    突出显示一段文本，每段文本独占一行，并且每段都具备小块垂直空白标记
+    语法：<p></p>
+    　 属性：align
+      取值：left 左对齐　　　center 居中对齐　　right 右对齐
+    7.分区元素
+    　　　块分区元素，标记：<div></div> 
+  作用　　：实现布局
+  　　　　　独占一行
+  　　　　行内分区元素
+  　　　　标记：<span></span>
+      特点：允许一行内显示多个span 
+    行内元素&块级别元素
+    行内元素：多个元素都能够在一行内显示 span,i,b,s,u,sup,sub
+    块级元素：能够在网页中独占一行的元素，都是块级元素　　div,p,h1~h6
+5.列表
+　　１．按照从上到下的结构排列的内容，可以使用列表来表示
+　　　２．组成：列表项，列表的类型
+　　　列表的类型：
+　　　　　有序列表　　　　<ol></ol>  Order list
+     无序列表　　　　<ul></ul>  Unordered list
+   列表项：
+   　　<li></li>  list Item
+   列表的属性
+   　有序列表　－<ol>    属性：type    作用：指定有序列表项前面的标志类型
+   取值：
+   　　１．１：默认值　　　按数字排列
+   　　　　　２．A  按大写字母排列
+        3.a
+        4.I
+        5.i
+      2.无序列表　　<ul>
+        none   不显示任何
+        square   实心方块
+        disc  默认实心圆
+6.图像和超链接
+　　１．URL　　　网址路径
+　　　　　Uniform Resource Locator  用于标识网络中资源的位子
+　　２．URl 分类
+　　　　１．绝对路径　　从固定位置查找网络资源的位置，获取其他网站资源
+　　　　　　　　　　　　　协议：http/https
+             主机名：/域名/IP地址
+             目录路径：
+             资源名称／文件名称
+            https://www.baidu.com/img/bd_logo1.png
+　　　　２．相对路径
+     　　从当前文件所在的位置开始查找资源文件经过的路径就是相对路径
+     　../../imgs/index/1.jpg
+      注意：url中不允许出现中文，url严格区分大小写
+　　　　３．根相对路径
+　　３．图像　jpg  gif动图　　　png支持透明字　　　
+　　图像的语法规范
+   标记
+   <img>  or <img/>
+　　　属性：１．src   要显示图片的url 2.width  宽度。允许以px为单位
+　　　的数值，　　px:pixel  像素
+　　　　３．height 高度，以px为单位的数值
+　　　　宽度和高度如果只指定一个属性值的话，那么另外一个属性值也跟着等比缩放

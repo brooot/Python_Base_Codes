@@ -1,0 +1,160 @@
+2017年1月3日　　星期三　　第２２天
+
+修改表名
+alter table 表名　rename 新表名；
+修改字段名：
+alter table 表名　chang 旧字段名　新字段名　类型;
+
+1.where 条件子句
+　　１．定义
+　　　　条件子句，一般配合查询，修改，删除操作
+　　２．语法：
+　　　　select * from 表名　where 条件
+示例：
+环境准备：
+　　１．创建一个库db2
+  2.创建一张表sanguo
+
+  查找所有蜀国的信息
+  　select * from sanguo where country='蜀国';
+　　查找下一个女人的信息
+　　　select name,sex from sanguo where sex='f';
+２．update修改操作
+　　１．语法
+　　　　update 表名　set
+    字段名１=值１,字段名2=值２...
+   　update sanguo set country='蜀国' where name='曹操';
+    update sanguo set sex='f',country='泰国' where name='魏延';
+3.delete 删除
+　　１．语法
+　　　delete from 表名　where 条件子句;
+4.运算符操作（配合查询修改删除）
+　１．数值比较
+　　　　　=  !=  >  <  >=　<=
+  查：select * from 表名　where 字段名　运算符　数字
+  改：update 表名　set 字段名=值　where .....;
+  删：delete from 表名　where 字段名　运算符　数字；
+
+  范围内比较
+  　　１．运算符：　between and ,in,not in
+    ２．语法：
+    　　　字段名　between 值１　and 值２
+    　　　字段名　in (值１,值2..)
+5.匹配空　非空
+　　１．空：is null
+  2.非空：is not null
+  注意：　null是空值，必须用is　或is not操作，''是空字符串，用=或!=
+
+6.模糊比较
+　　１．语法
+　　　　字段名　like 表达式
+　　２．表达式：
+　　　　１．_: 匹配单个字符
+　　　　２．%:匹配0到多个字符
+　　　　select id,name from sanguo where name  like '_%_';
+7.SQL高级操作
+　１．order by
+   1.作用方式
+   　　１．ASC 升序
+   　　２．DESC:降序
+   默认升序
+   按照降序排列
+   select * from sanguo order by gongji desc;
+　2.limit
+   作用：限制显示查询记录的个数
+   用法：
+   　　1.limit n   #显示几条记录
+     2.limit m,n  #m表示从第几条记录开始显示，n表示显示几条
+     　　注意：m的值是从0开始计算的，3则表示第四条记录
+　　　　select * from sanguo order by fangyu limit 1,3;
+　　　　select name,gongji from sanguo where country='蜀国' order  
+ 　　　　　by gongji limit 5,3;
+　３．聚合函数
+　　　　1.avg(字段名)：求字段的平均值
+　　　　2.sum(字段名)：和
+　　　　3.max(字段名)： 最大值
+    4.min(字段名)：最小值
+    5.count(字段名)：统计字段的个数
+    #select count(id),count(name) from sanguo;
+    注：空值null被统计，空字符串""不会被统计
+
+　４．group by
+    作用：给查询的结果分组
+    select name from sanguo group by name;
+    注:group by 后的字段名必须要为select之后的字段名
+    select country,avg(gongji) from sanguo 
+    　group by country;
+　５．distinct
+   1.作用：不显示字段的重复值，不能做聚合
+   　distinct与from之间所有字段必须全部相同才能去重
+   select distinct country from sanguo;
+　６．查询表记录时做数学运算
+　　　１．运算符
+　　　　+-*/ %
+　　　select id,name,gongji*2 as xin from sanguo;
+8.表操作小结
+　　修改表记录（行）　　　　　　　　　修改表字段（列）
+　　
+添加　insert into 表名　　　alter table 表名　add
+修改　update 表名　set    alter table 表名　modify
+删除　delete from 表名   alter table 表名　drop
+查询 select * from 表名
+
+9.约束
+　　１．作用
+　　为了保证数据的完整性，一致性，有效性的规则可以限制无效的数据
+　　插入到数据表里面
+　　２．默认约束
+　　　　１．默认约束（default)
+    2.非空约束（not null)
+    3.主键约束（primary key)
+    规则：一个表中只能有一个主键字段，对应字段的值不允许重复
+    　且不能为空，主键字段的key 标志PRI
+     把表中能够唯一标识为一条记录的字段设置为主键，通常把表中记录编号的字段
+     设置为主键
+     创建主键：
+     　在创建表的时候创建主键，
+         create table t4(id int primary key,
+             name varchar(15),
+             sex enum('boy','girl') default 'girl');
+    
+    在已有表中添加主键限制
+    alter table 表名　add primary key(字段名)；
+    
+    删除主键：
+    alter table 表名　drop primary key;
+    
+    自增长属性　auto_increment
+        create table t5(
+        -> id int primary key auto_increment,
+        -> name char(20),
+        -> age tinyint unsigned);
+　　　　在已有表中添加自增长属性
+　　　　alter table 表名　modify 字段名　数据类型 primary key auto_increment
+    ** alter table 表名　change 字段名　字段名　auto_increment
+        通常和主键一起配合使用
+
+    4.唯一约束（unique key)
+    使用规则
+    一个表里面可以有多个unique字段
+    unique字段的值不允许重复，但可以为空
+    unique的key标志是UNI
+    #在创建表时创建唯一约束
+         create table t7(
+        -> id int,
+        -> name char(20)
+        -> unique(id,name));
+    删除　alter table 表名　dorp unique index 字段名
+    5.外键约束（foreign key)
+
+Exercise:
+1.创建一张个人信息表，用来保存用户的个人信息
+姓名（不能为空）
+性别（默认为secret)
+身份证号（必须填写，且不能重复）
+手机（不能重复，但可以重写）
+创建完成后在表中随意插入几条记录
+测试：非空约束，默认约束，唯一约束
+
+
+

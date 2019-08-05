@@ -1,0 +1,158 @@
+2017年１２月15日　　星期五　　第１０天
+函数嵌套：
+函数变量
+　　函数名是变量，它在创建函数时绑定一个函数
+示例：
+def fn():
+  print('hello')
+f1=fn
+f1() # 
+函数嵌套示例：
+　　def f_outer():    #外部函数
+　　　　　　def f_inner():  
+          print('fgftg')
+      #调用内部嵌套函数：(调用两次)
+      f_inner()
+      f_inner()
+函数
+def hello(l):
+    for x in l:
+       print('欢迎',x)
+
+def f(fn,lst):
+    fn(lst)
+f(hello,['tom','jerry'])
+
+小结：
+　　函数可以嵌套
+　　函数可以返回函数
+　　函数可以传入函数
+
+全局变量和局部变量
+局部变量：　
+　　　　定义在函数内部的变量称为局部变量（包含函数的形象）
+说明：
+　　　局部变量只有在函数调用时存在
+全局变量：
+　　　定义在函数的外部，模块的内部的变量称为全局变量
+
+python 的作用域
+　　作用域也叫命名空间（namespace),是访问变量时查找变量名的范围空间
+
+python的四个作用域LEGB
+局部作用域（函数内部）　　local(Function)  L
+外部嵌套函数作用域　　　　　　Enclosiog Function locals  E　　　（只能两层以上用）
+函数定义所在模块的作用域　Global(module)   G
+python 内置模块的作用域　　Builtin(python)  B
+
+v=100
+def f1():
+  v=200
+  print(v)
+  def f2():
+     v=300
+     print(v)
+
+变量名的查找规则：
+　　在访问变量时，先查找本地变量，（局部变量），然后是此函数
+　　外部的函数内部的变量，之后是全局变量，最后是内置变量
+　　L->  E->  G->  B
+,在默认情况下，变量名赋值会创建或改变本地作用域的变量
+
+１．写一个函数，用列表返回n以内的菲波那契数列：
+def fibonacci(n):
+   ..
+输入２０，返回[1,1,2,3,5,8]
+２．用列表返回前n个菲波那契数列
+　def fibonacci(n):
+
+
+global  语句
+作用：
+　　告诉执行器，global语句声明的一个或多个变量，这些变量的作用域
+为模块及的作用域，称全局变量
+　　全局声明将赋值变量映身到模块文件内部的作用域
+语法：
+　　global 变量１...变量２...
+
+　global说明：
+１．全局变量如果要在函数内部赋值，则必须经过全局声明，否则会被认为是局部变量
+２．全局变量在函数内部不经过声明就可以直接访问，（如果变量已经关联一个对象）
+３．不能先声明局部变量，在用global声明为全局变量，此做法不符合语法规则
+４．global变量列表的变量名不能出现在此作用域的参数列表里
+v=100
+def fn():
+   global v
+   v=200
+fn()
+print(v)   #200
+
+练习：
+创建一个全局变量l=[],写一个函数
+l=[]
+def input_number():
+　　　　　l.append(x)
+     global x
+     return l
+
+input_number()
+
+此函数每次调用将从键盘读入一些数据，追加到列表l中
+
+
+nonlocal 语句
+作用：
+　　告诉解释执行器，nonlocal声明的变量不是局部变量，也不是全局变量，
+而是外部嵌套函数内的变量
+
+var=100
+def outter():
+    var=200
+    print('shuchu',var)
+    def inner():
+    　　　　nonlocal var
+        var+=1
+        print('shuchu2',var)
+    print('shuchu3',var)
+print('shuchu4',var)
+
+１．nonlocal语句只能在被嵌套函数内部使用
+２．访问nonlocal变量将对外部嵌套函数作用域内的变量进行操作
+３．当有两层及以上函数嵌套时，访问nonlocal变量只对最近
+一层变量进行操作
+４．nonlocal语句的变量列表里的变量名不能出现在此函数的参数列表里
+
+lambda 表达式（又称匿名函数）
+作用：创建一个匿名函数对象，同def类似，但不能提供函数名
+语法格式：
+　　lambda[形参１，形参２...]:表达式
+示例：
+　　def myadd(x,y):
+       return x+y
+  print('20+30=',myadd(20,30))
+  myadd=lambda x,y:x+y
+
+１． lambda只是一个表达式，它用来创建一个函数对象
+２．当lambda表达式执行时，返回的是冒号（：）后的表达式值，
+３．lambda表达式创建的函数只能包含一条语句
+４．lambda比函数简单，且可以随时创建和销毁，有利于减少程序的偶合度
+
+练习：
+写一个lambda表达式，求两个变量的最大值：
+mymax=lambda x,y:x if x>y else y
+
+globals()/locals函数
+globals()  返回全局作用域内的变量的字典
+locals()  　　返回当前局部作用域内
+
+练习：
+prime(素数／质数)
+写一个函数　isprimes(x),判断x是否为素数，如果为素数，返回True，否则false
+写一个程序调用此函数，输入一些数，判断是否为素数
+２．写一个函数prime_m2n(m,n),返回从m开始到n结束（不包含n）范围内的列表，并打印如：
+l=prime_m2n(5,20)
+print(l)  [5,7,11,13,17,19]
+3.写一个函数primes(n),返回指定范围n内的素数的列表，并打印这个列表如：
+l=primes(10)
+print(l)    #[2,3,5,7]
+4.给出一个数n,写一个函数计算1+2**2+3**3...+n**n

@@ -1,0 +1,69 @@
+僵尸进程处理方法：
+１．　fork 使用　wait系列函数将等待子进程退出然后处理
+　　　　multiprocessing  join 同样的道理
+ifconfig
+查　inet 地址
+
+udp
+1.创建套接字
+sockfd=socket(AF_INET,SOCK_DGRAM))
+２．绑定客户端
+soctfd.bind(addr)
+３．接收发送
+data,addr = sockfd.recvfrom(BUFFERSIZE)
+
+tcp和udp的区别
+１．tcp是有连接的，udp是基于无连接的
+２．tcp是三次握手，四次打招呼，
+３．tcp套接字需要listen和accept,udp不需要
+４．tcp数据是流式输出，会有粘包
+５．tcp资源要求比较多，udp资源要求少，适合视屏直播
+６．tcp可以保证数据的可靠性，udp不能
+getpeername()
+fileno()
+getsockname()
+
+设置套接字属性
+setsockopt(lever,optname,value)
+lever:定义的选项
+    SOL_SOCKET:要设置基本套接字
+    IPPROTO_IP:ipv4 接口
+    IPPROTO_IP6:ipv6 接口
+    IPPROTO_IP:设置tcp接口
+optname:设置某一组的具体哪个选项
+value:配合第二个参数，将第二个参数设置为value值
+socket.getsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR)
+
+服务器模型：
+c/s   b/s
+
+服务器分类：
+循环服务器：
+　　　　连接客户端，处理客户端请求，不能同时处理多个客户端请求
+　　　　处理完一个再处理下一个。
+　　　　适用于可以很快完成的情况
+　　　　udp更适合循环服务器，因为tcp需要不断的连接断开会有一定的消耗
+
+并发服务器
+　　　　多进程并发
+１．创建套接字socket  bind linten
+2.使用sockfd 准备接收客户端连接请求
+３．接收一个请求，创建子进程完成请求内容
+io并发服务器
+
+多线程并发
+１．创建socket　套接字
+２．等待连接
+３．每有一个客户端连接，就创建一个线程完成客户端请求
+４．主线程不断循环等待新的连接请求
+
+socketserver 模块
+
+客户端处理类
+'DatagramRequestHandler',  如果使用数据报套接字则使用此类
+'StreamRequestHandler',    如果使用流式套接字则使用此类
+
+'ForkingMixIn'             创建进程并发使用此类
+'ThreadindMixIn'           创建线程并发用此类
+'TCPServer'                创建tcpsver则使用　此类
+'UDPServer'                创建udpserver则用此类

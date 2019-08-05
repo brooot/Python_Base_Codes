@@ -1,0 +1,74 @@
+
+进程间的通信：
+队列(Queue):
+  Queue(maxsize=0)
+  ****来自multiprocessing包中Queue
+  put 往队列里放东 西，阻塞
+  putnowait()  非阻塞
+  get 从队列里面取出东西　阻塞
+  getnowait()   非阻塞
+  empty()      判空
+  full()       判满
+  qsize()      看队列中现在存有多少元组
+
+保护数据的方法，将所有操作这个要保护的数据的行为进行加锁
+    from multiprocessing import Lock
+    lock.acquire()
+    money.value -= 1
+    lock.release()
+
+管道Pipe
+管道是一种基本Ipc机制，作用于血缘关系的进程之间，完成数据传递
+调用pipe系统函数即可创建一个管道
+
+管道局限：
+数据自己读不能自己写
+数据一旦被读走，便不在管道中存在，不可反复读取
+数据只能单方向流动
+只能有公共祖先间使用
+
+与队列相似，都是用来传递消息的
+
+Pipe() 在进程之间创建一个管道，并返回
+　　　　　　　（conn1,conn2) conn1只能用于接受数据
+　　　　　　　　　　　　　　　　　　　　　conn2 只能用于发送数据
+　　close()   关闭管道
+  recv()　　　　接受数据
+  send(obj)  发送数据
+
+信号量：
+　　　　信号量可以看作是互斥量的一种升级版本，
+信号量(Semaphore)，有时被称为信号灯，是在多线程环境下
+使用的一种设施，是可以用来保证两个或多个关键代码段不被并发调用。
+在进入一个关键代码段之前，线程  必须获取一个信号量；一旦该关键代码段完成了，
+那么该线程必须释放信号量。其它想进入该关键代码段的线程必须等待直
+到第一个线程释放信号量
+
+共享内存share memory
+
+数组是访问元素快，添加删除慢，列表与之相反
+
+Socket套接字
+
+导入pool进程池
+进程池函数：
+
+Pool 类主要方法
+apply(func[, args[, kwds]])
+向线程池添加任务，阻塞方式
+func 任务执行的函数，args参数元组，和kwds关键字参数
+apply_async(func[, args[, kwds[, callback[, error_callback]]]])
+apply()方法的一个变体，它返回一个结果对象，非阻塞
+callback，如果有任务结束将调用此函数，该函数一个参数
+map(func, iterable[, chunksize])
+close()
+    关闭进程池，阻止任何更多的任务提交到进程池。一旦所有任务完成，工作进程将退出。
+terminate()
+    立即停止工作进程，而不需要完成未完成的工作。当进程池对象被垃圾收集，
+    terminate()将被立即调用。
+join()
+    等待进程池所有进程结束，在使用join()之前，必须调用close()或terminate()
+
+作业：
+完善生产者消费者模型管道的实现
+完成共享内容的例子　
