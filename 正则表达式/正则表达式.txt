@@ -1,0 +1,547 @@
+正则表达式:
+    定义：
+    即文本的高级匹配模式,提供搜索替代等功能。其本质是一系列由特殊符号组成的字串，这个字串即正则表达式。
+
+
+    匹配原理：
+    由普通字符和特殊符号组成字符串，通过描述字符的重复和位置等行为，达到匹配某一类字符串的目的。
+
+    特点：
+    * 方便文本处理
+    * 支持语言众多
+    * 使用灵活多样
+
+python --->  re模块
+
+re.findall(pattern, string)
+功能: 使用正则表达式匹配目标字符串内容
+参数: 
+    pattern 正则表达式
+    string  目标字符串
+
+返回值: 
+    列表,列表中为匹配到的内容
+
+
+元字符的使用
+    
+    1. 普通字符
+        元字符 a b c
+
+        In [13]: re.findall('hello ','hello world')
+        Out[13]: ['hello ']
+
+    2. 或
+        元字符:  |
+        匹配规则:  匹配 | 两边任意一个正则表达式
+        
+        In [23]: re.findall('ab|cd','abccdefisa;jl;sbaabcd')
+        Out[23]: ['ab', 'cd', 'ab', 'cd']
+
+        In [25]: re.findall('abc|cde','abcde')
+        Out[25]: ['abc']
+
+    3. 匹配单个字符
+
+        元字符:  .
+        匹配规则: 匹配除'\n'外的任意字符
+        f.0  ---> foo   fao  f@o  f 0    (匹配任意除换行外的字符)
+
+        In [26]: re.findall('f.o','foo is not fao')
+        Out[26]: ['foo', 'fao']
+
+        In [28]: re.findall('f.o','foo is not f上o')
+        Out[28]: ['foo', 'f上o']
+
+    4. 匹配开始位置
+
+        元字符:  ^
+        匹配规则: 匹配目标字符串的开头位置
+
+        In [35]: re.findall('^hi','hi,Tom')
+        Out[35]: ['hi']
+
+    5.匹配结束位置
+
+        元字符: $
+        匹配规则: 匹配目标字符串的结束位置
+
+        In [39]: re.findall('Tom$','hi,Tom')
+        Out[39]: ['Tom']
+
+        In [40]: re.findall('大叔$','hi,Tom大叔')
+        Out[40]: ['大叔']
+
+
+    6.匹配重复
+
+        元字符:  *
+        匹配规则: 匹配前面的字符出现 0 次或 多次
+
+        fo*  --> fooooooooo  f   fo
+
+        In [42]: re.findall('fo*','fadfasffssffofofoooosfs')
+        Out[42]: ['f', 'f', 'f', 'f', 'f', 'fo', 'fo', 'foooo', 'f']
+
+        In [45]: re.findall('f*','faffafsfe')
+        Out[45]: ['f', '', 'ff', '', 'f', '', 'f', '', '']
+
+
+     7.匹配重复
+
+        元字符:  +
+        匹配规则: 匹配前面的字符出现 1 次或 多次
+
+        fo+ --> fo   foooooo
+
+        In [52]: re.findall('.+\.py$','test.py launch.py attack.py')
+        Out[52]: ['test.py launch.py attack.py']
+
+
+     8.匹配重复
+
+        元字符:  ?
+        匹配规则: 匹配前面的字符出现 0 次或 1 多次
+
+        fo? --> f   fo
+
+        In [60]: re.findall("fo?",'foffosfsoffofo')
+        Out[60]: ['fo', 'f', 'fo', 'f', 'f', 'fo', 'fo']
+
+    9.匹配重复
+
+        元字符:  {n}
+        匹配规则: 匹配前面的字符出现 指定的重复次数
+
+        In [61]: re.findall("fo{2}",'foffooosfsoffoooooofoo')
+        Out[61]: ['foo', 'foo', 'foo']
+
+    10.匹配重复
+
+        元字符:  {m,n}
+        匹配规则: 匹配前面的字符出现 m 到 n 次
+
+        fo{2,4}  -->  foo fooo foooo
+
+        In [62]: re.findall("fo{2,4}",'foffooosfsoffoooooofoo')
+        Out[62]: ['fooo', 'foooo', 'foo']
+
+    11. 匹配字符集合
+
+        元字符: [字符集]
+        匹配规则: 匹配任意一个 '字符集中的字符'
+
+        [abc123]   a b c 1 2 3
+        [a-z]  
+        [A-Z]
+        [0-9]
+        [_123a-z]
+
+        In [63]:re.findall('^[A-Z][a-z]*','Boy')
+        Out[63]: ['Boy']
+
+        In [69]: re.findall('[_0-9a-z]*','port_007')
+        Out[69]: ['port_007', '']   字符串以' '作为结束标识,所以会匹配到一个' '
+
+    12. 匹配字符集
+
+        元字符: [^...]
+        匹配规则: 字符集取非,除了列出的字符之外任意一个字符
+
+        [^abc]  --> 除 a b c 外任意字符
+        [^ ]+ 
+            In [71]: re.findall('[^ ]+','a little boy')
+            Out[71]: ['a', 'little', 'boy']
+
+    13. 匹配任意(非)数字字符
+
+        元字符: \d  \D
+        匹配规则: \d 匹配任意数字字符     [0-9]
+                 \D 匹配任意非数字字符   [^0-9]
+
+        匹配电话号码:
+        In [73]: re.findall("1\d{10}","12345678900")
+        Out[73]: ['12345678900']
+
+
+    14. 匹配任意(非)普通字符
+
+        元字符: \w  \W
+        匹配规则: \w 匹配任意普通字符     [_0-9a-zA-Z] | 普通汉字
+                 \W 匹配任意非普通字符   [^0-9]
+
+
+        In [2]: re.findall("\w+","hello 你好")
+        Out[2]: ['hello', '你好']
+
+        In [4]: re.findall("\W+","hello 你好*&() ^%让我们荡起双桨")
+        Out[4]: [' ', '*&() ^%']
+
+
+    15. 匹配任意(非)空字符
+
+        元字符: 
+            \s 匹配任意空字符     [ \r\t\n\v\f]   (不会显示出来)
+            \S 匹配任意非空字符
+
+        In [9]: re.findall("\S+","I am here")
+        Out[9]: ['I', 'am', 'here']
+
+        In [51]: re.findall("\s",' \t')
+        Out[51]: [' ', '\t']
+
+
+    16. 匹配字符串位置
+
+        元字符: \A  \Z
+        匹配规则: 
+            \A 匹配字符串开头位置  <--> ^    (用法相同)
+            \Z 匹配字符串结尾位置  <--> $
+ 
+
+        完全匹配: 正则表达式要完全匹配目标字符串内容
+             
+            (使用 ^ 和 $ 来保证)
+
+        In [12]: re.findall("^\d+$","123456")
+        Out[12]: ['123456']
+
+
+    17. 匹配(非)单词边界
+
+        元字符:  \b   \B
+        匹配规则: 
+
+             \b 匹配单词边界位置   
+                普通字符和非普通字符的交界处是单词边界
+
+                In [5]: re.findall(r"\band","and*23")
+                Out[5]: ['and']
+
+             \B 匹配非单词边界位置
+
+                In [7]: re.findall(r"\Band","Tand*23")
+                Out[7]: ['and']
+
+匹配单个字符: a  .  \d  \D  \w  \W  \s  \S  [...]  [^...]
+
+匹配重复:  *  +  ?  {n}  {m,n}
+
+匹配位置: ^  $  \A  \Z  \b  \B
+
+其他: | () \
+
+
+正则表达式转义
+
+正则中的特殊符号:
+. * + ? ^ $ [] {} () | \
+
+正则表达式如果匹配特殊字符需要加 \ 表达转义
+
+             正则             目标字符串
+如:          \$\d+   ----->    $10
+
+            pattern           string
+
+Python       "\\$\\d+""        "$10"
+
+raw          r"\$\d+"           "$10"    (一般用此法)
+raw字串 : 原始字符串对内容不解释转义,就表达内容原本意义
+
+
+
+
+贪婪与费贪婪
+
+    贪婪模式: 正则表达式的重复匹配总是尽可能多的向后匹配更多内容
+
+        * + ? {m,n}
+
+    非贪婪(懒惰模式): 尽可能少的匹配内容
+
+    贪婪  --->  非贪婪  *?  +?  ??  {m,n}?
+
+        In [19]: re.findall(r'ab+?','abbbbbbbbbbb')
+        Out[19]: ['ab']
+
+        In [20]: re.findall(r'ab??','abbbbbbbbbbb')
+        Out[20]: ['a']
+
+
+正则表达式的子组
+
+    可以使用()为正则表达式建立子组,子组可以看做是正则表达式内部操作的一个整体
+
+    * 子组是在正则表达式整体匹配到内容的前提下才会发挥作用,它不影响正则表达式整体取匹配目标内容这一原则
+
+    In [32]: re.search(r'(ab)*','ababababbbbb').group()
+    Out[32]: 'abababab'
+
+    子组作用
+
+        1. 作为内部整体可以改变某些元字符的重复行为
+
+            In [34]: re.search(r'(ab)+\d+','abababab123ffs').group()
+            Out[34]: 'abababab123'
+
+            In [43]: re.search(r'\b\w+@\w+\.(com|cn)','xzl@123.com kity@234.cn').group()
+            Out[43]: 'xzl@123.com'
+
+        2. 子组在某些操作中可以单独提取出某些内容
+
+            In [48]: re.search(r"(http|https|ftp)://\S+","https://www.baidu.com").group()
+            Out[48]: 'https://www.baidu.com'
+
+            In [49]: re.search(r"(http|https|ftp)://\S+","https://www.baidu.com").group(1)
+            Out[49]: 'https'
+
+    子组使用注意事项:
+
+        * 一个正则表达式中可以有多个子组
+        * 子组一般由外到内,从左到右称之为第一,第二,第三...子组
+        * 子组不能重叠,嵌套不宜很多
+
+
+    捕获组 和 非捕获组   
+
+        格式: (?P<name>pattern)
+
+            In [53]: re.search(r"(?P<头>http|https|ftp)://\S+","https://www.baidu.com").group('头')
+            Out[53]: 'https'
+
+        作用: 可以通过组名更方便地获取某租内容
+
+
+
+    正则表达式设计原则
+
+        1. 正确性,能正确匹配到目标内容
+        2.排他性,除了要匹配的内容,尽可能不会匹配到其他内容
+        3.全面性,需要对目标的各种情况进行考虑,做到不遗漏
+
+
+
+re模块
+
+regex = compile(pattern, flags = 0)
+功能: 生成正则表达式
+参数: 
+    pattern  正则表达式
+    flags    功能标志位,丰富正则表达式的匹配功能
+返回值: 正则表达式对象
+
+
+
+re.findall(pattern, string, flags)
+功能: 从目标字符串查找正则匹配内容
+参数:
+    pattern 正则表达式
+    string  目标字符串
+    flags   标志位
+返回值:  返回匹配到的内容
+        如果正则有子组则只返回子组对应的内容
+
+
+regex.findall(string, pos, endpos)
+功能: 从目标字符串查找正则匹配内容
+参数:
+    string  目标字符串
+    pos     匹配目标的起始位置 (闭)
+    endpos  匹配目标的终止位置 (开)
+返回值:  返回匹配到的内容
+        如果正则有子组则只返回子组对应的内容
+
+re.split(pattern, string, flags = 0)
+功能: 根据正则匹配内容切割字符串
+参数: pattern  string  flags
+返回值:  返回列表, 列表中为切割的内容
+
+
+re.sub(pattern, replaceStr, string, max, flags)
+功能: 替换正则匹配到的目标子串部分
+参数: 
+    pattern
+    replaceStr : 要替换的内容
+    string
+    max : 最多替换几处
+    flags
+返回值:　返回替换后的字符串
+    
+    如：
+        In [57]: re.sub(r"\s","#","hello world    nihao  China")
+        Out[57]: 'hello#world####nihao##China'
+
+re.subn(pattern, replaceStr, string, max, flags)
+功能: 替换正则匹配到的目标子串部分
+参数: 
+    pattern
+    replaceStr : 要替换的内容
+    string
+    max : 最多替换几处
+    flags
+返回值:　返回一个元组，为实际替换了几处和替换后的字符串
+
+    如：
+        In [59]: re.subn(r"\s+","#","hello world    nihao  China")
+        Out[59]: ('hello#world#nihao#China', 3)
+
+
+re.finditer(pattern, string, flags)
+功能: 使用正则表达式匹配目标字符串
+参数:　pattern string flags
+返回值：　返回一个迭代对象，迭代到的内容是一个match对象
+
+    如:
+        In [78]: it = re.finditer(r"\d+","2008-2018 10年\
+           ....:     中国发生了翻天覆地的变化")
+
+        In [79]: 
+
+        In [79]: for i in it:
+           ....:         print(i.group())
+           ....:     
+        2008
+        2018
+        10
+
+
+re.fullmatch(pattern, string, flags)
+功能: 完全匹配目标字符串
+参数: pattern string flags
+返回值: 返回匹配到的match对象
+       如果没匹配成功返回None
+
+    * 相当于前后分别加 ^ 和 $
+
+
+re.match(pattern, string, flags)
+功能: 从开头位置匹配目标字符串
+参数: pattern string flags
+返回值: 返回匹配到的match对象
+       如果没匹配成功返回None
+
+    * 相当于在前面加 ^
+
+
+search(pattern, string, flags)
+功能: 正则表达式匹配匹配目标字符串,只匹配第一处
+参数: pattern string flags
+返回值: 返回匹配到的match对象
+       如果没匹配成功返回None
+
+compile对象属性:
+
+
+    flags: 标志位
+        若: regex = re.compile(r"abc")
+
+        In [64]: regex.flags
+        Out[64]: 32   
+
+    pattern: 正则表达式
+        若: regex = re.compile(r"abc")
+        
+        In [65]: regex.pattern
+        Out[65]: 'abc'
+
+    groups: 有多少子组
+
+        In [72]: regex = re.compile(r"(ab)cd(ef)",flags = re.I)
+
+        In [73]: regex.groups
+        Out[73]: 2
+
+    groupindex: 捕获组形成组名和序列号的字典 组名为键 , 第几组为值
+
+        In [74]: regex = re.compile(r"(?P<dog>ab)cd(?P<cat>ef)",flags = re.I)
+
+        In [75]: regex.groupindex
+        Out[75]: mappingproxy({'dog': 1, 'cat': 2})
+
+
+
+
+
+
+match对象属性
+pattern = r"(?P<dog>ab)cd(?P<pig>ef)"
+regex = re.compile(pattern)
+
+
+# 获取match对象
+import re
+match_obj = regex.search("abcdefghij",pos = 0, endpos = 6)
+print(match_obj.pos)    # 匹配目标字符串的开始位置 0
+print(match_obj.endpos) # 匹配目标字符串的结束位置 6
+ 
+print(match_obj.re)     # 正则表达式
+print(match_obj.string) # 目标字符串
+print(match_obj.lastgroup) # 最后一组的组名
+print(match_obj.lastindex) # 最后一组是第几组
+
+
+
+print(match_obj.start())  # 匹配内容的开始位置
+print(match_obj.end())    # 匹配内容的结束位置
+print(match_obj.span())   # 匹配内容的起止位置
+
+
+group()
+功能: 获取match对象对应的内容
+参数: 默认为0 表示获取整个正则匹配的内容,
+     如果为序列号或者子组名则为获取某个子组匹配的对应的内容
+
+返回值: 返回得到的子串
+
+
+print(match_obj.group(0))   # 获取整个match对象内容
+print(match_obj.group(2))   # 获取第二个子组匹配内容
+print(match_obj.group('dog'))  # 获取名为'dog'的子组的匹配内容
+
+print(match_obj.groupdict())   # 获取捕获组字典{捕获组名:对应内容}
+print(match_obj.groups())   # 获取每个子组匹配内容
+
+
+
+
+flags 参数的使用
+    re.compile  re.findall re.search re.match
+    re.finditer re.fullmatch re.sub re.subn re.spilt
+
+作用: 辅助正则表达式,丰富匹配结果
+
+I == IGNORECASE 匹配时忽略字母大小写
+S == DOTALL     作用于元字符 . 使其可以匹配 '\n'
+
+M == MULTILINE  作用于 ^  $ 使其可以匹配每一行开头结尾位置
+
+X == VERBOSE    可以给正则添加注释
+
+pattern = r"""\w+ #....
+\d+  # ......
+"""
+
+使用多个标志位使用按位或连接
+
+如:
+    flags = re.X | re.I
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
