@@ -168,7 +168,7 @@ re.findall(pattern, string)
 
         元字符: \w  \W
         匹配规则: \w 匹配任意普通字符     [_0-9a-zA-Z] | 普通汉字
-                 \W 匹配任意非普通字符   [^0-9]
+                 \W 匹配任意非普通字符   [^_0-9a-zA-Z]
 
 
         In [2]: re.findall("\w+","hello 你好")
@@ -349,8 +349,8 @@ regex.findall(string, pos, endpos)
     string  目标字符串
     pos     匹配目标的起始位置 (闭)
     endpos  匹配目标的终止位置 (开)
-返回值:  返回匹配到的内容
-        如果正则有子组则只返回子组对应的内容
+返回值:  返回匹配到的内容,形式为列表 [(),(),...()]
+        *如果正则有子组则只返回子组对应的内容
 
 re.split(pattern, string, flags = 0)
 功能: 根据正则匹配内容切割字符串
